@@ -3,13 +3,13 @@ import os
 import re
 import datetime
 import logging
-from groq import Groq
-from config import GROQ_API_KEY
+from groq import Groq, DefaultHttpxClient
+from config import GROQ_API_KEY, OUTBOUND_PROXY
 
 def get_groq_client():
     if not GROQ_API_KEY:
         raise ValueError("GROQ_API_KEY не задан в файле .env")
-    return Groq(api_key=GROQ_API_KEY)
+    return Groq(api_key=GROQ_API_KEY, http_client=DefaultHttpxClient(proxy=OUTBOUND_PROXY or None))
 
 async def transcribe_audio_file(file_path: str) -> str:
     """Распознает аудиофайл (включая .ogg из Telegram) через Whisper в Groq."""

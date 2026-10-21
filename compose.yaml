@@ -1,0 +1,32 @@
+services:
+  bot:
+    image: mydiaryfs:local
+    build: .
+    restart: unless-stopped
+    init: true
+    user: "1000:1000"
+    environment:
+      MYDIARY_ENV_FILE: /run/mydiary/bot.env
+      TZ: :/etc/localtime
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - ./config:/run/mydiary:ro
+      - ./data:/data
+      - /etc/localtime:/etc/localtime:ro
+    read_only: true
+    tmpfs:
+      - /tmp:rw,noexec,nosuid,size=128m,mode=1777
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    mem_limit: 512m
+    cpus: 1.0
+    pids_limit: 128
+    stop_grace_period: 30s
+    logging:
+      driver: json-file
+      options:
+        max-size: "5m"
+        max-file: "3"

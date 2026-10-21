@@ -7,14 +7,18 @@ from aiogram import Bot, Dispatcher, F, types
 from aiogram.filters import CommandStart, Command
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 
-from config import TELEGRAM_BOT_TOKEN
+from config import TELEGRAM_BOT_TOKEN, TELEGRAM_PROXY, validate_runtime
+from aiogram.client.session.aiohttp import AiohttpSession
+from access_control import install_access_guard
 from ai_service import transcribe_audio_file, parse_food_text
 from fatsecret_client import FatSecretClient
 
 logging.basicConfig(level=logging.INFO)
 
-bot = Bot(token=TELEGRAM_BOT_TOKEN) if TELEGRAM_BOT_TOKEN else None
+allowed_ids = validate_runtime()
+bot = Bot(token=TELEGRAM_BOT_TOKEN, session=AiohttpSession(proxy=TELEGRAM_PROXY or None))
 dp = Dispatcher()
+install_access_guard(dp, allowed_ids)
 fatsecret = FatSecretClient()
 
 MEAL_NAMES = {
