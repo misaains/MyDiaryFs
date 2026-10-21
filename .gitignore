@@ -15,3 +15,10 @@ __pycache__/
 # Виртуальное окружение
 venv/
 .venv/
+
+# HomeNAS private runtime files
+config/
+data/
+*.env
+runtime-status.json
+runtime-status.tmp

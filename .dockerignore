@@ -1,0 +1,11 @@
+.git
+.env
+.env.*
+*.env
+config/
+data/
+.venv/
+venv/
+__pycache__
+fatsecret_user.json
+runtime-status.json
